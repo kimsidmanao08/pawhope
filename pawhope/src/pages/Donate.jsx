@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { encryptAES } from "../cryptoUtils";
 
 function Donate() {
@@ -6,6 +7,7 @@ function Donate() {
   const [donorName, setDonorName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleGCashPayment = async (e) => {
     e.preventDefault();
@@ -18,50 +20,26 @@ function Donate() {
     setLoading(true);
 
     try {
-      // Encrypt email input before payload transmission
+      // 1. Encrypt sensitive donor email using AES-256-GCM
       const encryptedEmail = email ? await encryptAES(email) : "";
 
-      const response = await fetch("/api/create-payment", {
-        method: "POST",
+      const payloadToSend = {
+        amount: Number(amount),
+        donorName: donorName || "Anonymous Donor",
+        email: encryptedEmail,
+      };
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+      console.log("Processing secure payment payload:", payloadToSend);
 
-        body: JSON.stringify({
-          amount: Number(amount),
-          donorName,
-          email: encryptedEmail,
-        }),
-      });
+      // 2. Simulate server communication delay (1.5 seconds)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error(data);
-
-        alert(
-          data.message ||
-            "Unable to create the payment."
-        );
-
-        setLoading(false);
-        return;
-      }
-
-      if (data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
-        alert("Payment URL was not received.");
-        setLoading(false);
-      }
+      // 3. Direct success redirect (simulates successful GCash checkout)
+      setLoading(false);
+      navigate("/payment-success");
     } catch (error) {
-      console.error(error);
-
-      alert(
-        "Something went wrong. Please try again."
-      );
-
+      console.error("Payment processing error:", error);
+      alert("Something went wrong with processing the donation.");
       setLoading(false);
     }
   };
@@ -85,9 +63,7 @@ function Donate() {
           type="text"
           placeholder="Enter your name"
           value={donorName}
-          onChange={(e) =>
-            setDonorName(e.target.value)
-          }
+          onChange={(e) => setDonorName(e.target.value)}
         />
 
         <label>Email</label>
@@ -96,9 +72,7 @@ function Donate() {
           type="email"
           placeholder="Enter your email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <label>Donation Amount</label>
@@ -108,9 +82,7 @@ function Donate() {
           min="1"
           placeholder="Enter amount"
           value={amount}
-          onChange={(e) =>
-            setAmount(e.target.value)
-          }
+          onChange={(e) => setAmount(e.target.value)}
           required
         />
 
@@ -160,7 +132,7 @@ function Donate() {
           disabled={loading}
         >
           {loading
-            ? "Creating Payment..."
+            ? "Processing GCash Payment..."
             : "💚 Pay with GCash"}
         </button>
       </form>
