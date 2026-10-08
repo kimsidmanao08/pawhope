@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { encryptAES } from "../cryptoUtils";
 
 function Donate() {
   const [amount, setAmount] = useState("");
@@ -17,6 +18,9 @@ function Donate() {
     setLoading(true);
 
     try {
+      // Encrypt email input before payload transmission
+      const encryptedEmail = email ? await encryptAES(email) : "";
+
       const response = await fetch("/api/create-payment", {
         method: "POST",
 
@@ -27,7 +31,7 @@ function Donate() {
         body: JSON.stringify({
           amount: Number(amount),
           donorName,
-          email,
+          email: encryptedEmail,
         }),
       });
 

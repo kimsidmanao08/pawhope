@@ -15,7 +15,6 @@ import Admin from "./pages/Admin";
 
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
-import CryptoDemo from "./pages/CryptoDemo";
 
 function App() {
   return (
@@ -58,11 +57,6 @@ function App() {
           <Route
             path="/payment-failed"
             element={<PaymentFailed />}
-          />
-
-          <Route
-            path="/crypto-demo"
-            element={<CryptoDemo />}
           />
 
         </Routes>
