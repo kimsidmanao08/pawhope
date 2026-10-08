@@ -8,10 +8,9 @@ function Donate() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
-  const [encryptedData, setEncryptedData] = useState("");
   const navigate = useNavigate();
 
-  // Step 1: Handle form submit and generate encryption
+  // Step 1: Encrypt and open the QR Modal (DO NOT REDIRECT YET)
   const handleInitiatePayment = async (e) => {
     e.preventDefault();
 
@@ -23,11 +22,11 @@ function Donate() {
     setLoading(true);
 
     try {
-      // Encrypt donor's sensitive email using AES-256-GCM
+      // 1. Encrypt email address
       const encryptedEmail = email ? await encryptAES(email) : "";
-      setEncryptedData(encryptedEmail);
+      console.log("Encrypted Donor Email Payload:", encryptedEmail);
 
-      // Open the GCash QR Modal prompt
+      // 2. Open the QR Modal
       setLoading(false);
       setShowQRModal(true);
     } catch (error) {
@@ -37,11 +36,11 @@ function Donate() {
     }
   };
 
-  // Step 2: Confirm simulated payment inside Modal
+  // Step 2: Handle button inside the Modal to finalize transaction
   const handleConfirmPayment = () => {
     setLoading(true);
 
-    // Simulate GCash transaction verification delay (2 seconds)
+    // 2-second simulation delay before redirecting
     setTimeout(() => {
       setLoading(false);
       setShowQRModal(false);
@@ -54,8 +53,8 @@ function Donate() {
       <h1>Donate to PawHope 🐾</h1>
 
       <p>
-        Your donation can help provide food, medicine,
-        shelter, and rescue support for stray cats and dogs.
+        Your donation can help provide food, medicine, shelter, and rescue
+        support for stray cats and dogs.
       </p>
 
       <form className="donation-form" onSubmit={handleInitiatePayment}>
@@ -113,12 +112,14 @@ function Donate() {
         </button>
       </form>
 
-      {/* --- GCash QR Code Overlay / Modal --- */}
+      {/* --- GCash Modal Prompt --- */}
       {showQRModal && (
-        <div style={modalOverlayStyle}>
-          <div style={modalContentStyle}>
-            <div style={{ background: "#005ce6", padding: "15px", color: "#fff", borderRadius: "8px 8px 0 0" }}>
-              <h2 style={{ margin: 0, fontSize: "20px" }}>GCash Payment Portal</h2>
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <div style={headerStyle}>
+              <h2 style={{ margin: 0, fontSize: "18px", color: "#fff" }}>
+                GCash Payment Portal
+              </h2>
             </div>
 
             <div style={{ padding: "20px", color: "#333" }}>
@@ -128,23 +129,22 @@ function Donate() {
                 Donor: <strong>{donorName || "Anonymous"}</strong>
               </p>
 
-              {/* Dynamic QR Code Generator */}
-              <div style={{ margin: "20px 0" }}>
+              <div style={{ margin: "15px 0" }}>
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://pawhope.vercel.app/pay?amount=${amount}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://pawhope.vercel.app/pay?amount=${amount}`}
                   alt="GCash Payment QR Code"
                   style={{ border: "2px solid #005ce6", borderRadius: "8px", padding: "5px" }}
                 />
               </div>
 
-              <p style={{ fontSize: "12px", color: "#888" }}>
-                Scan with your GCash App to pay or click simulate payment below.
+              <p style={{ fontSize: "12px", color: "#666", marginBottom: "15px" }}>
+                Scan with GCash or click below to simulate payment.
               </p>
 
               <button
                 onClick={handleConfirmPayment}
                 disabled={loading}
-                style={modalButtonStyle}
+                style={primaryBtnStyle}
               >
                 {loading ? "Verifying Transaction..." : "Simulate Paid Transaction"}
               </button>
@@ -152,7 +152,7 @@ function Donate() {
               <button
                 onClick={() => setShowQRModal(false)}
                 disabled={loading}
-                style={{ ...modalButtonStyle, background: "#ccc", color: "#333", marginTop: "8px" }}
+                style={cancelBtnStyle}
               >
                 Cancel
               </button>
@@ -164,8 +164,8 @@ function Donate() {
   );
 }
 
-// Simple inline styles for modal overlay
-const modalOverlayStyle = {
+// Modal Styles
+const overlayStyle = {
   position: "fixed",
   top: 0,
   left: 0,
@@ -175,27 +175,46 @@ const modalOverlayStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  zIndex: 1000,
+  zIndex: 9999,
 };
 
-const modalContentStyle = {
-  backgroundColor: "#fff",
-  borderRadius: "10px",
+const modalStyle = {
+  backgroundColor: "#ffffff",
+  borderRadius: "12px",
   width: "90%",
-  maxWidth: "400px",
+  maxWidth: "380px",
   textAlign: "center",
-  boxShadow: "0 4px 15px rgba(0,0,0,0.3)",
+  overflow: "hidden",
+  boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
 };
 
-const modalButtonStyle = {
+const headerStyle = {
+  backgroundColor: "#005ce6",
+  padding: "15px",
+};
+
+const primaryBtnStyle = {
   width: "100%",
   padding: "12px",
   backgroundColor: "#005ce6",
-  color: "#fff",
+  color: "#ffffff",
   border: "none",
   borderRadius: "6px",
   fontWeight: "bold",
-  fontSize: "16px",
+  fontSize: "15px",
+  cursor: "pointer",
+  marginBottom: "8px",
+};
+
+const cancelBtnStyle = {
+  width: "100%",
+  padding: "10px",
+  backgroundColor: "#e0e0e0",
+  color: "#333333",
+  border: "none",
+  borderRadius: "6px",
+  fontWeight: "bold",
+  fontSize: "14px",
   cursor: "pointer",
 };
 
