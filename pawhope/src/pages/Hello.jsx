@@ -1,14 +1,12 @@
 function Hello() {
     return(
 
-<div classname="Home">
+<div classname="Page">
 
-    <h1> HELLOO WORLD    </h1>
-
-
-
-
-
+    <h1> HELLOO WORLD</h1>
+    <p>
+        Hello world we are bsit.
+    </p>
 
 
 </div>
