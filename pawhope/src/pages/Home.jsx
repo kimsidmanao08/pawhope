@@ -21,11 +21,11 @@ function Home() {
             </Link>
 
              <div className="hero-buttons">
-            <Link to="/Hello" className="btn">
+            <Link to="/Hello" className="btn secondary">
               Hello World
             </Link>
 
-            <Link to="/report" className="btn secondary">
+            <Link to="/report" className="btn third">
               Report a Stray
             </Link>
 
