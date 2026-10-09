@@ -1,17 +1,17 @@
 function Hello() {
     return(
 
-<div classname="Page">
+        <div classname="Page">
 
-    <h1> HELLOO WORLD</h1>
-    <p>
-        Hello world we are bsit.
-    </p>
+        <h1> HELLOO WORLD</h1>
 
+            <p>
+                Hello world we are bsit.
+                PawHope is a web-based fundraising platform created
+                to support stray cats and dogs.
+            </p>
 
-</div>
-
-
+        </div>
     );
 }
 
