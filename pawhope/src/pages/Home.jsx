@@ -6,6 +6,7 @@ function Home() {
 
       <section className="hero">
         <div>
+
           <h1>Give Hope to Stray Animals 🐾</h1>
 
           <p>
@@ -24,11 +25,10 @@ function Home() {
               Hello World
             </Link>
 
-
-
             <Link to="/report" className="btn secondary">
               Report a Stray
             </Link>
+
           </div>
         </div>
       </section>

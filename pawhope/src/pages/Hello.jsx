@@ -1,10 +1,20 @@
 function Hello() {
     return(
 
-<div> Hello</div>
+<div classname="Home">
+
+    <h1> HELLOO WORLD    </h1>
 
 
-    )
 
 
+
+
+
+</div>
+
+
+    );
 }
+
+export default Hello;
