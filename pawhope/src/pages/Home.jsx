@@ -19,6 +19,13 @@ function Home() {
               Donate Now
             </Link>
 
+             <div className="hero-buttons">
+            <Link to="/Hello" className="btn">
+              Hello World
+            </Link>
+
+
+
             <Link to="/report" className="btn secondary">
               Report a Stray
             </Link>
