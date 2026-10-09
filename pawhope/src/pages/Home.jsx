@@ -20,7 +20,6 @@ function Home() {
               Donate Now
             </Link>
 
-             <div className="hero-buttons">
             <Link to="/Hello" className="btn secondary">
               Hello World
             </Link>
